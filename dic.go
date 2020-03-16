@@ -3,50 +3,58 @@ package main
 import (
 	"errors"
 	"fmt"
+
+
+	//	"github.com/inancgumus/screen"
+	//"os"
+	//"os/exec"
 	"sort"
 	"strings"
 )
 
-var Dic map[string]string
 
 //Menue ,print menue!
 func Menue() {
 
+//	screen.Clear()
+
 	fmt.Println("\n\t  ** MENUE **")
-	fmt.Println("\n   _______________________________\n")
-	fmt.Println("\t1: Insert A New Word \n")
-	fmt.Println("\n   _______________________________\n")
-	fmt.Println("\t2: Find A Word \n")
-	fmt.Println("\n   _______________________________\n")
-	fmt.Println("\t3: Remove A Word  \n")
-	fmt.Println("\n   _______________________________\n")
-	fmt.Println("\t4: Show List  \n")
-	fmt.Println("\n   _______________________________\n")
-	fmt.Println("\t5: Exit  \n")
-	fmt.Println("\n   _______________________________\n")
+	fmt.Println("   _______________________________")
+	fmt.Println("\t1: Insert A New Word ")
+	fmt.Println("   _______________________________")
+	fmt.Println("\t2: Find A Word ")
+	fmt.Println("   _______________________________")
+	fmt.Println("\t3: Remove A Word  ")
+	fmt.Println("   _______________________________")
+	fmt.Println("\t4: Show List  ")
+	fmt.Println("   _______________________________")
+	fmt.Println("\t5: Exit  ")
+	fmt.Println("   _______________________________")
 }
 func main() {
 
-	var t bool
 
-	for t {
+	Dic:=make(map[string]string)
+
+	for  {
 
 		var n string
 
 		Menue()
-
-		fmt.Scan(&n)
+		
+		fmt.Scanln(&n)
 
 		switch n {
 
 		case "1":
-			Insert()
+			Insert(Dic)
+			break
 
 		case "2":
 			var word string
 			fmt.Scan(&word)
-			Find(word)
-			Find2(word)
+			Find(word,Dic)
+			Find2(word,Dic)
 
 		case "3":
 			var word string
@@ -54,16 +62,16 @@ func main() {
 			delete(Dic, word)
 
 		case "4":
-			Show()
+			Show(Dic)
 
 		case "5":
-			t = false
+			break
 		}
 	}
 }
 
 //Find ,find word in dic!
-func Find(w string) error {
+func Find(w string,Dic map[string]string) error {
 
 	_, ok := Dic[w]
 	if ok {
@@ -74,7 +82,7 @@ func Find(w string) error {
 }
 
 //Insert ,insert new word or definition!
-func Insert() {
+func Insert(Dic map[string]string) {
 
 	var word string
 	var def string
@@ -85,31 +93,29 @@ func Insert() {
 	fmt.Println("definition(s)?")
 	fmt.Scan(&def)
 
-	if err := Find(word); err != nil {
+	if err := Find(word,Dic); err != nil {
 		Dic[word] = def
 		fmt.Println("\n Added")
 	} else {
-		Dic[word] = def
+		//Dic[word] = append(Dic[word] ,def)
+		Dic[word] += def
 		fmt.Println("\n Updated")
 	}
 }
-func Find2(value string) error {
+func Find2(value string,Dic map[string]string) error {
 
 	var err error
-	for key, _ := range Dic {
+	for key, v := range Dic {
 		if strings.ContainsAny(Dic[key], value) == true {
-			fmt.Println(key)
+			fmt.Println(v)
 			err = nil
 		}
 	}
 	return err
 }
-func Scond_case() {
-
-}
 
 //Show ,show dic!
-func Show() {
+func Show(Dic map[string]string) {
 
 	//sort
 	keys := make([]string, 0, len(Dic))
@@ -120,6 +126,6 @@ func Show() {
 
 	//print
 	for _, k := range keys {
-		fmt.Println(k, Dic[k])
+		fmt.Println(k, Dic[k],",")
 	}
 }
